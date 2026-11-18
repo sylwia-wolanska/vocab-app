@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Secrets
+.env
+
+# IDE / OS
+.idea/
+.DS_Store
+
+# Local databases
+*.db
