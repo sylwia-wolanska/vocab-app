@@ -25,6 +25,7 @@ cp .env.example .env
 
 # 3. Install dependencies
 uv sync
+uv run pre-commit install
 
 # 4. Run the API
 uv run fastapi dev app/main.py
