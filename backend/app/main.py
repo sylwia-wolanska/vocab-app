@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 from app.core.config import settings
 from app.core.logging import setup_logging
+from app.db.session import engine
 from app.health.router import router as health_router
 
 setup_logging(settings.debug)
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     logger.info("Starting %s", settings.app_name)
     yield
+    engine.dispose()
     logger.info("Shutting down %s", settings.app_name)
 
 
