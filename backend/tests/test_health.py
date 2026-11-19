@@ -6,23 +6,23 @@ from app.main import app
 
 
 class WorkingSession:
-    def execute(self, *args, **kwargs):
+    def execute(self, *args: object, **kwargs: object) -> None:
         return None
 
 
 class BrokenSession:
-    def execute(self, *args, **kwargs):
+    def execute(self, *args: object, **kwargs: object) -> None:
         raise SQLAlchemyError("database is down")
 
 
-def test_liveness_returns_ok(client: TestClient):
+def test_liveness_returns_ok(client: TestClient) -> None:
     response = client.get("/api/v1/health")
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
-def test_readiness_returns_ok_when_database_responds(client: TestClient):
+def test_readiness_returns_ok_when_database_responds(client: TestClient) -> None:
     app.dependency_overrides[get_db] = lambda: WorkingSession()
 
     response = client.get("/api/v1/health/ready")
@@ -31,7 +31,7 @@ def test_readiness_returns_ok_when_database_responds(client: TestClient):
     assert response.json() == {"status": "ready", "database": "ok"}
 
 
-def test_readiness_returns_503_when_database_is_down(client: TestClient):
+def test_readiness_returns_503_when_database_is_down(client: TestClient) -> None:
     app.dependency_overrides[get_db] = lambda: BrokenSession()
 
     response = client.get("/api/v1/health/ready")

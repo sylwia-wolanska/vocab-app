@@ -38,6 +38,7 @@ API docs: http://127.0.0.1:8000/docs
 cd backend
 uv run ruff check .
 uv run ruff format --check .
+uv run mypy app tests
 uv run pytest
 ```
 
