@@ -62,3 +62,12 @@ vocab-app/
 - Branch naming: `type/VOC-n-short-description` (e.g. `feat/VOC-4-cards-table`)
 - Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
 - Changes reach `main` only through a pull request with passing CI, merged with squash
+
+## Database migrations
+
+```bash
+cd backend
+uv run alembic upgrade head                            # apply all migrations
+uv run alembic revision --autogenerate -m "message"    # create a migration from model changes
+uv run alembic current                                 # show the current version
+```
