@@ -10,6 +10,7 @@ from app.core.logging import setup_logging
 from app.courses.router import router as courses_router
 from app.db.session import engine
 from app.health.router import router as health_router
+from app.imports.router import router as imports_router
 
 setup_logging(settings.debug)
 logger = logging.getLogger(__name__)
@@ -30,3 +31,4 @@ app = FastAPI(title=settings.app_name, lifespan=lifespan)
 register_exception_handlers(app)
 app.include_router(health_router, prefix=settings.api_prefix)
 app.include_router(courses_router, prefix=settings.api_prefix)
+app.include_router(imports_router, prefix=settings.api_prefix)

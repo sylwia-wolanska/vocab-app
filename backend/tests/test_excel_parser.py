@@ -1,24 +1,7 @@
-from collections.abc import Sequence
-from io import BytesIO
-
 import pytest
-from openpyxl import Workbook
-from openpyxl.worksheet.worksheet import Worksheet
 
 from app.imports.parser import ExcelFormatError, ExcelRow, parse_workbook
-
-HEADER = ["ID", "Word", "Translation", "Description"]
-
-
-def make_workbook(rows: Sequence[Sequence[object]]) -> bytes:
-    workbook = Workbook()
-    sheet = workbook.active
-    assert isinstance(sheet, Worksheet)
-    for row in rows:
-        sheet.append(list(row))
-    buffer = BytesIO()
-    workbook.save(buffer)
-    return buffer.getvalue()
+from tests.factories import HEADER, make_workbook
 
 
 def test_parses_valid_rows() -> None:
