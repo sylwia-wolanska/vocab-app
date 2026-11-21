@@ -1,40 +1,13 @@
-from collections.abc import Sequence
-from typing import Any
-
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.cards.models import Card
-from tests.factories import HEADER, make_workbook
+from tests.factories import create_course, upload
 
 XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 DOG = [1, "der Hund", "the dog", None]
 CAT = [2, "die Katze", "the cat", None]
-
-
-def create_course(client: TestClient) -> int:
-    response = client.post(
-        "/api/v1/courses",
-        json={"name": "German B1", "source_language": "de", "target_language": "pl"},
-    )
-    course_id: int = response.json()["id"]
-    return course_id
-
-
-def upload(
-    client: TestClient,
-    course_id: int,
-    rows: Sequence[Sequence[object]],
-    *,
-    dry_run: bool = False,
-) -> tuple[int, Any]:
-    response = client.post(
-        f"/api/v1/courses/{course_id}/import",
-        params={"dry_run": dry_run},
-        files={"file": ("words.xlsx", make_workbook([HEADER, *rows]), XLSX)},
-    )
-    return response.status_code, response.json()
 
 
 def summary(**counts: int) -> dict[str, int]:
