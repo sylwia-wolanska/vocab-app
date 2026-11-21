@@ -5,8 +5,8 @@ from fastapi.responses import JSONResponse
 class AppError(Exception):
     status_code = 500
 
-    def __init__(self, detail: str) -> None:
-        super().__init__(detail)
+    def __init__(self, detail: str | list[str]) -> None:
+        super().__init__(str(detail))
         self.detail = detail
 
 
