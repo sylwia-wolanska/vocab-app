@@ -80,3 +80,18 @@ uv run alembic upgrade head                            # apply all migrations
 uv run alembic revision --autogenerate -m "message"    # create a migration from model changes
 uv run alembic current                                 # show the current version
 ```
+
+## Excel format
+
+Each course is imported from its own `.xlsx` file. The first sheet needs a header row:
+
+| ID | Word | Translation | Description |
+|----|------|-------------|-------------|
+| 1  | der Hund | the dog | |
+
+- `ID`, `Word` and `Translation` are required; `Description` is optional.
+- IDs are positive whole numbers, unique within the file.
+- Column order and capitalisation don't matter; empty rows are skipped.
+- One invalid row rejects the whole file, with a list of all errors.
+
+Upload: `POST /api/v1/courses/{course_id}/import` with the file as form field `file`.
