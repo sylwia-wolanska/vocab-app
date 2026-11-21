@@ -110,6 +110,7 @@ Add `?dry_run=true` to see the summary without saving anything.
 
 | Method and path | Purpose |
 |---|---|
+| `POST /api/v1/auth/register` | Create an account (email, password of 8-128 characters) |
 | `POST /api/v1/courses` | Create a course |
 | `GET /api/v1/courses` | List courses |
 | `GET /api/v1/courses/{id}` | Get one course |
