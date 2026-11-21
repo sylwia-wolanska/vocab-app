@@ -49,10 +49,14 @@ uv run pytest
 vocab-app/
 ├── .github/workflows/   # CI pipeline
 ├── backend/
-│   ├── app/
+│   │   ├── app/
+│   │   ├── cards/       # card model (later: schemas, service, router)
 │   │   ├── core/        # settings, logging
-│   │   ├── health/      # health check endpoints
+│   │   ├── courses/     # course model (later: schemas, service, router)
+│   │   ├── db/          # engine, session, Base, mixins
+│   │   ├── health/      # liveness and readiness checks
 │   │   └── main.py      # application entry point
+│   ├── migrations/      # Alembic migrations
 │   ├── tests/
 │   └── pyproject.toml
 └── docker-compose.yaml  # local PostgreSQL
