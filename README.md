@@ -23,6 +23,9 @@ docker compose up -d db
 cd backend
 cp .env.example .env
 
+# set SECRET_KEY in backend/.env to the output of:
+openssl rand -hex 32
+
 # 3. Install dependencies
 uv sync
 uv run pre-commit install
@@ -116,5 +119,7 @@ Add `?dry_run=true` to see the summary without saving anything.
 | `GET /api/v1/courses/{id}` | Get one course |
 | `POST /api/v1/courses/{id}/import` | Upload the course's Excel file (`?dry_run=true` to preview) |
 | `GET /api/v1/courses/{id}/cards` | List cards: `search`, `include_inactive`, `limit`, `offset` |
+| `POST /api/v1/auth/token` | Log in (form fields `username` = email, `password`); returns a bearer token |
+| `GET /api/v1/auth/me` | The logged-in user (header `Authorization: Bearer <token>`) |
 
 Full interactive documentation: `/docs`.
