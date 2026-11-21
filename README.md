@@ -105,3 +105,15 @@ Every upload syncs the course with the file:
 | ID back in the file | card reactivated |
 
 Add `?dry_run=true` to see the summary without saving anything.
+
+## Main endpoints
+
+| Method and path | Purpose |
+|---|---|
+| `POST /api/v1/courses` | Create a course |
+| `GET /api/v1/courses` | List courses |
+| `GET /api/v1/courses/{id}` | Get one course |
+| `POST /api/v1/courses/{id}/import` | Upload the course's Excel file (`?dry_run=true` to preview) |
+| `GET /api/v1/courses/{id}/cards` | List cards: `search`, `include_inactive`, `limit`, `offset` |
+
+Full interactive documentation: `/docs`.
