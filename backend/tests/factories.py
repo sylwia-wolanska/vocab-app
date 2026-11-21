@@ -43,3 +43,16 @@ def upload(
         files={"file": ("words.xlsx", make_workbook([HEADER, *rows]), XLSX)},
     )
     return response.status_code, response.json()
+
+
+def auth_headers(
+    client: TestClient,
+    email: str = "sylwia@example.com",
+    password: str = "correct horse battery",
+) -> dict[str, str]:
+    client.post("/api/v1/auth/register", json={"email": email, "password": password})
+    response = client.post(
+        "/api/v1/auth/token", data={"username": email, "password": password}
+    )
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
