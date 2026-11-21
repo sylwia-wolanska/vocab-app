@@ -5,13 +5,17 @@ from fastapi.responses import JSONResponse
 class AppError(Exception):
     status_code = 500
 
-    def __init__(self, detail: str) -> None:
-        super().__init__(detail)
+    def __init__(self, detail: str | list[str]) -> None:
+        super().__init__(str(detail))
         self.detail = detail
 
 
 class NotFoundError(AppError):
     status_code = 404
+
+
+class PayloadTooLargeError(AppError):
+    status_code = 413
 
 
 class ConflictError(AppError):
