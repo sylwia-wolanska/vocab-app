@@ -35,6 +35,9 @@ API docs: http://127.0.0.1:8000/docs
 
 ## Running checks
 
+Tests need the database running (`docker compose up -d db`) and, once, a test database:
+`docker compose exec db createdb -U vocab vocab_test`
+
 ```bash
 cd backend
 uv run ruff check .
