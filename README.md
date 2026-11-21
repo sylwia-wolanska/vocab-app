@@ -95,3 +95,13 @@ Each course is imported from its own `.xlsx` file. The first sheet needs a heade
 - One invalid row rejects the whole file, with a list of all errors.
 
 Upload: `POST /api/v1/courses/{course_id}/import` with the file as form field `file`.
+Every upload syncs the course with the file:
+
+| Row in the file | Result |
+|---|---|
+| New ID | card added |
+| Same ID, changed text | card updated, learning progress kept |
+| ID missing from the file | card deactivated, learning progress kept |
+| ID back in the file | card reactivated |
+
+Add `?dry_run=true` to see the summary without saving anything.

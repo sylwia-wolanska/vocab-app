@@ -12,9 +12,9 @@ router = APIRouter(prefix="/courses/{course_id}/import", tags=["imports"])
 
 @router.post("")
 def import_course_file(
-    course_id: int, file: UploadFile, db: DbSession
+    course_id: int, file: UploadFile, db: DbSession, dry_run: bool = False
 ) -> ImportSummary:
     content = file.file.read(MAX_UPLOAD_BYTES + 1)
     if len(content) > MAX_UPLOAD_BYTES:
         raise PayloadTooLargeError("The file is larger than 5 MB")
-    return service.import_file(db, course_id, content)
+    return service.import_file(db, course_id, content, dry_run=dry_run)
