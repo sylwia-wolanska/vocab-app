@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.auth.router import router as auth_router
 from app.cards.router import router as cards_router
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
@@ -34,3 +35,4 @@ app.include_router(health_router, prefix=settings.api_prefix)
 app.include_router(courses_router, prefix=settings.api_prefix)
 app.include_router(imports_router, prefix=settings.api_prefix)
 app.include_router(cards_router, prefix=settings.api_prefix)
+app.include_router(auth_router, prefix=settings.api_prefix)
