@@ -120,7 +120,13 @@ Add `?dry_run=true` to see the summary without saving anything.
 - Wrong: back to step 0; the failed step becomes the recovery target.
 - While recovering, each correct answer moves two steps up, never past the target; then one step at a time again.
 - A month is 30 days.
--
+
+## Answer check
+
+A typed answer is correct when it matches the expected word after both are normalized:
+Unicode NFC, surrounding and repeated whitespace collapsed, lowercase.
+Accents, letters such as ß, and punctuation must match.
+
 ## Main endpoints
 
 | Method and path | Purpose |
