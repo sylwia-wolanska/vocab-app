@@ -109,6 +109,18 @@ Every upload syncs the course with the file:
 
 Add `?dry_run=true` to see the summary without saving anything.
 
+## Review schedule
+
+| Step | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Next review in | 4 h | 8 h | 1 day | 2 days | 4 days | 1 week | 2 weeks | 1 month | 2 months | 4 months | 6 months |
+
+- After Learn, a word starts at step 0.
+- Correct: one step up; step 10 repeats every 6 months.
+- Wrong: back to step 0; the failed step becomes the recovery target.
+- While recovering, each correct answer moves two steps up, never past the target; then one step at a time again.
+- A month is 30 days.
+-
 ## Main endpoints
 
 | Method and path | Purpose |
