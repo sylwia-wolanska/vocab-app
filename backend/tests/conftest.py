@@ -6,10 +6,12 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session
 
+from app.core.clock import utc_now
 from app.db import all_models  # noqa: F401
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import app
+from tests.factories import NOW
 
 TEST_DATABASE_URL = os.environ.get(
     "TEST_DATABASE_URL",
@@ -22,6 +24,12 @@ def client() -> Iterator[TestClient]:
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def frozen_client(db_client: TestClient) -> TestClient:
+    app.dependency_overrides[utc_now] = lambda: NOW
+    return db_client
 
 
 @pytest.fixture(scope="session")
