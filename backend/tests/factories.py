@@ -21,10 +21,13 @@ def make_workbook(rows: Sequence[Sequence[object]]) -> bytes:
     return buffer.getvalue()
 
 
-def create_course(client: TestClient, name: str = "German B1") -> int:
+def create_course(
+    client: TestClient, name: str = "German B1", headers: dict[str, str] | None = None
+) -> int:
     response = client.post(
         "/api/v1/courses",
         json={"name": name, "source_language": "de", "target_language": "pl"},
+        headers=headers or auth_headers(client),
     )
     course_id: int = response.json()["id"]
     return course_id
