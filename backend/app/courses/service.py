@@ -7,8 +7,8 @@ from app.courses.models import Course
 from app.courses.schemas import CourseCreate
 
 
-def create_course(db: Session, data: CourseCreate) -> Course:
-    course = Course(**data.model_dump())
+def create_course(db: Session, user_id: int, data: CourseCreate) -> Course:
+    course = Course(user_id=user_id, **data.model_dump())
     db.add(course)
     try:
         db.commit()
@@ -19,8 +19,18 @@ def create_course(db: Session, data: CourseCreate) -> Course:
     return course
 
 
-def list_courses(db: Session) -> list[Course]:
-    return list(db.scalars(select(Course).order_by(Course.name)))
+def list_courses(db: Session, user_id: int) -> list[Course]:
+    query = select(Course).where(Course.user_id == user_id).order_by(Course.name)
+    return list(db.scalars(query))
+
+
+def get_course_for_user(db: Session, user_id: int, course_id: int) -> Course:
+    course = db.scalar(
+        select(Course).where(Course.id == course_id, Course.user_id == user_id)
+    )
+    if course is None:
+        raise NotFoundError(f"Course {course_id} not found")
+    return course
 
 
 def get_course(db: Session, course_id: int) -> Course:
