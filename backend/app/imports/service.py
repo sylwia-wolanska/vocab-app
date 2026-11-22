@@ -2,15 +2,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.cards.models import Card
-from app.courses.service import get_course
+from app.courses.service import get_course_for_user
 from app.imports.parser import ExcelRow, parse_workbook
 from app.imports.schemas import ImportSummary
 
 
 def import_file(
-    db: Session, course_id: int, content: bytes, *, dry_run: bool = False
+    db: Session, user_id: int, course_id: int, content: bytes, *, dry_run: bool = False
 ) -> ImportSummary:
-    get_course(db, course_id)
+    get_course_for_user(db, user_id, course_id)
     rows = parse_workbook(content)
 
     cards = {

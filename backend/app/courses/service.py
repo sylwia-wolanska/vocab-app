@@ -31,10 +31,3 @@ def get_course_for_user(db: Session, user_id: int, course_id: int) -> Course:
     if course is None:
         raise NotFoundError(f"Course {course_id} not found")
     return course
-
-
-def get_course(db: Session, course_id: int) -> Course:
-    course = db.get(Course, course_id)
-    if course is None:
-        raise NotFoundError(f"Course {course_id} not found")
-    return course

@@ -39,11 +39,13 @@ def upload(
     rows: Sequence[Sequence[object]],
     *,
     dry_run: bool = False,
+    headers: dict[str, str] | None = None,
 ) -> tuple[int, Any]:
     response = client.post(
         f"/api/v1/courses/{course_id}/import",
         params={"dry_run": dry_run},
         files={"file": ("words.xlsx", make_workbook([HEADER, *rows]), XLSX)},
+        headers=headers or auth_headers(client),
     )
     return response.status_code, response.json()
 
