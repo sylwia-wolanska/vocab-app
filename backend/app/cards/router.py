@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query
 
+from app.auth.dependencies import CurrentUser
 from app.cards import service
 from app.cards.schemas import CardPage, CardRead
 from app.db.session import DbSession
@@ -12,6 +13,7 @@ router = APIRouter(prefix="/courses/{course_id}/cards", tags=["cards"])
 @router.get("")
 def list_cards(
     course_id: int,
+    user: CurrentUser,
     db: DbSession,
     search: Annotated[str | None, Query(max_length=100)] = None,
     include_inactive: bool = False,
@@ -21,6 +23,7 @@ def list_cards(
     term = search.strip() if search else None
     cards, total = service.list_cards(
         db,
+        user.id,
         course_id,
         search=term or None,
         include_inactive=include_inactive,

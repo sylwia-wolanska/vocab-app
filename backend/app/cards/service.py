@@ -2,11 +2,12 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.cards.models import Card
-from app.courses.service import get_course
+from app.courses.service import get_course_for_user
 
 
 def list_cards(
     db: Session,
+    user_id: int,
     course_id: int,
     *,
     search: str | None = None,
@@ -14,7 +15,7 @@ def list_cards(
     limit: int = 50,
     offset: int = 0,
 ) -> tuple[list[Card], int]:
-    get_course(db, course_id)
+    get_course_for_user(db, user_id, course_id)
 
     query = select(Card).where(Card.course_id == course_id)
     if not include_inactive:
