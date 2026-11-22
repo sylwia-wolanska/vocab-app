@@ -3,9 +3,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.cards.models import Card
-from tests.factories import create_course, upload
+from tests.factories import (
+    HEADER,
+    XLSX,
+    auth_headers,
+    create_course,
+    make_workbook,
+    upload,
+)
 
-XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 DOG = [1, "der Hund", "the dog", None]
 CAT = [2, "die Katze", "the cat", None]
 
@@ -137,3 +143,26 @@ def test_import_to_missing_course_returns_404(db_client: TestClient) -> None:
     result = upload(db_client, 999999, [DOG])
 
     assert result == (404, {"detail": "Course 999999 not found"})
+
+
+def test_import_requires_login(db_client: TestClient) -> None:
+    course_id = create_course(db_client)
+
+    response = db_client.post(
+        f"/api/v1/courses/{course_id}/import",
+        files={"file": ("words.xlsx", make_workbook([HEADER, DOG]), XLSX)},
+    )
+
+    assert response.status_code == 401
+
+
+def test_import_to_another_users_course_returns_404_and_changes_nothing(
+    db_client: TestClient, db_session: Session
+) -> None:
+    course_id = create_course(db_client)
+    other = auth_headers(db_client, "other@example.com")
+
+    result = upload(db_client, course_id, [DOG], headers=other)
+
+    assert result == (404, {"detail": f"Course {course_id} not found"})
+    assert cards_in_db(db_session) == []

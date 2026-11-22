@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi.testclient import TestClient
 
-from tests.factories import create_course, upload
+from tests.factories import auth_headers, create_course, upload
 
 DOG = [1, "der Hund", "the dog", "a pet"]
 CAT = [2, "die Katze", "the cat", None]
@@ -13,7 +13,11 @@ SALE = [4, "der Rabatt", "10% off", None]
 def get_cards(
     client: TestClient, course_id: int, **params: str | int | bool
 ) -> tuple[int, Any]:
-    response = client.get(f"/api/v1/courses/{course_id}/cards", params=params)
+    response = client.get(
+        f"/api/v1/courses/{course_id}/cards",
+        params=params,
+        headers=auth_headers(client),
+    )
     return response.status_code, response.json()
 
 
@@ -85,3 +89,21 @@ def test_missing_course_returns_404(db_client: TestClient) -> None:
     status, body = get_cards(db_client, 999999)
 
     assert (status, body) == (404, {"detail": "Course 999999 not found"})
+
+
+def test_cards_require_login(db_client: TestClient) -> None:
+    course_id = create_course(db_client)
+
+    response = db_client.get(f"/api/v1/courses/{course_id}/cards")
+
+    assert response.status_code == 401
+
+
+def test_cards_of_another_users_course_return_404(db_client: TestClient) -> None:
+    course_id = create_course(db_client)
+    upload(db_client, course_id, [DOG])
+    other = auth_headers(db_client, "other@example.com")
+
+    response = db_client.get(f"/api/v1/courses/{course_id}/cards", headers=other)
+
+    assert response.status_code == 404
