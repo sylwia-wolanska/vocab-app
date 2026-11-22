@@ -139,6 +139,7 @@ Accents, letters such as ß, and punctuation must match.
 | `GET /api/v1/courses/{id}/cards` | List cards: `search`, `include_inactive`, `limit`, `offset` |
 | `POST /api/v1/auth/token` | Log in (form fields `username` = email, `password`); returns a bearer token |
 | `GET /api/v1/auth/me` | The logged-in user (header `Authorization: Bearer <token>`) |
+| `GET /api/v1/courses/{id}/study` | Counts for the course page: `due` (Revise), `learn_new` (up to 10), `new_total` |
 
 Full interactive documentation: `/docs`.
 Course, card and import endpoints require `Authorization: Bearer <token>`. Users only see their own courses; another user's course returns 404.

@@ -13,6 +13,7 @@ from app.courses.router import router as courses_router
 from app.db.session import engine
 from app.health.router import router as health_router
 from app.imports.router import router as imports_router
+from app.study.router import router as study_router
 
 setup_logging(settings.debug)
 logger = logging.getLogger(__name__)
@@ -36,3 +37,4 @@ app.include_router(courses_router, prefix=settings.api_prefix)
 app.include_router(imports_router, prefix=settings.api_prefix)
 app.include_router(cards_router, prefix=settings.api_prefix)
 app.include_router(auth_router, prefix=settings.api_prefix)
+app.include_router(study_router, prefix=settings.api_prefix)
