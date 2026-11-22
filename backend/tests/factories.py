@@ -1,13 +1,41 @@
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from io import BytesIO
 from typing import Any
 
 from fastapi.testclient import TestClient
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.cards.models import Card
 
 HEADER = ["ID", "Word", "Translation", "Description"]
 XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+NOW = datetime(2026, 1, 1, 12, 0, tzinfo=UTC)
+
+
+def words(count: int) -> list[list[object]]:
+    return [[i, f"word {i}", f"translation {i}", None] for i in range(1, count + 1)]
+
+
+def set_learned(
+    db_session: Session,
+    excel_id: int,
+    due_at: datetime,
+    *,
+    step: int = 0,
+    recovery_target: int | None = None,
+    active: bool = True,
+) -> int:
+    card = db_session.scalars(select(Card).where(Card.excel_id == excel_id)).one()
+    card.learning_step = step
+    card.recovery_target = recovery_target
+    card.due_at = due_at
+    card.is_active = active
+    db_session.commit()
+    return card.id
 
 
 def make_workbook(rows: Sequence[Sequence[object]]) -> bytes:
