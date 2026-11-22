@@ -123,3 +123,4 @@ Add `?dry_run=true` to see the summary without saving anything.
 | `GET /api/v1/auth/me` | The logged-in user (header `Authorization: Bearer <token>`) |
 
 Full interactive documentation: `/docs`.
+Course, card and import endpoints require `Authorization: Bearer <token>`. Users only see their own courses; another user's course returns 404.
