@@ -38,3 +38,20 @@ class LearnExercise(BaseModel):
     description: str | None
     options: list[str]
     answer: str
+
+
+class LearnRound(BaseModel):
+    cards: list[FlashCard]
+    exercises: list[LearnExercise]
+
+
+class LearnAnswerSubmit(BaseModel):
+    exercise: Exercise
+    answer: str = Field(max_length=255)
+
+
+class LearnAnswerResult(BaseModel):
+    correct: bool
+    card: FlashCard
+    learned: bool
+    due_at: datetime | None
