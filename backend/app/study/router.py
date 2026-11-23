@@ -1,10 +1,20 @@
+import random
+
 from fastapi import APIRouter
 
 from app.auth.dependencies import CurrentUser
 from app.core.clock import Now
 from app.db.session import DbSession
 from app.study import service
-from app.study.schemas import AnswerResult, AnswerSubmit, FlashCard, StudyCounts
+from app.study.schemas import (
+    AnswerResult,
+    AnswerSubmit,
+    FlashCard,
+    LearnAnswerResult,
+    LearnAnswerSubmit,
+    LearnRound,
+    StudyCounts,
+)
 
 router = APIRouter(prefix="/courses/{course_id}/study", tags=["study"])
 
@@ -41,5 +51,33 @@ def submit_revise_answer(
         correct=correct,
         card=FlashCard.model_validate(card),
         step=card.learning_step,
+        due_at=card.due_at,
+    )
+
+
+@router.get("/learn")
+def get_learn_round(course_id: int, user: CurrentUser, db: DbSession) -> LearnRound:
+    cards, exercises = service.get_learn_round(db, user.id, course_id, random.Random())
+    return LearnRound(
+        cards=[FlashCard.model_validate(card) for card in cards], exercises=exercises
+    )
+
+
+@router.post("/learn/{card_id}")
+def submit_learn_answer(
+    course_id: int,
+    card_id: int,
+    data: LearnAnswerSubmit,
+    user: CurrentUser,
+    db: DbSession,
+    now: Now,
+) -> LearnAnswerResult:
+    card, correct, learned = service.submit_learn_answer(
+        db, user.id, course_id, card_id, data.exercise, data.answer, now
+    )
+    return LearnAnswerResult(
+        correct=correct,
+        card=FlashCard.model_validate(card),
+        learned=learned,
         due_at=card.due_at,
     )
