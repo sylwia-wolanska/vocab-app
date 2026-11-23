@@ -10,6 +10,7 @@ from app.courses.service import get_course_for_user
 from app.reviews.answers import is_correct
 from app.reviews.models import Exercise, Review, ReviewMode
 from app.reviews.scheduler import next_schedule, start_learning
+from app.study.characters import special_characters
 from app.study.exercises import build_exercises
 from app.study.schemas import LearnExercise, StudyCounts
 
@@ -34,6 +35,14 @@ def get_counts(db: Session, user_id: int, course_id: int, now: datetime) -> Stud
         learn_new=min(SESSION_SIZE, new_total or 0),
         new_total=new_total or 0,
     )
+
+
+def get_characters(db: Session, user_id: int, course_id: int) -> list[str]:
+    get_course_for_user(db, user_id, course_id)
+    words = db.scalars(
+        select(Card.word).where(Card.course_id == course_id, Card.is_active.is_(True))
+    )
+    return special_characters(words)
 
 
 def get_revise_round(

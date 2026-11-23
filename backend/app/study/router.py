@@ -9,6 +9,7 @@ from app.study import service
 from app.study.schemas import (
     AnswerResult,
     AnswerSubmit,
+    CharacterSet,
     FlashCard,
     LearnAnswerResult,
     LearnAnswerSubmit,
@@ -81,3 +82,8 @@ def submit_learn_answer(
         learned=learned,
         due_at=card.due_at,
     )
+
+
+@router.get("/characters")
+def get_characters(course_id: int, user: CurrentUser, db: DbSession) -> CharacterSet:
+    return CharacterSet(characters=service.get_characters(db, user.id, course_id))
