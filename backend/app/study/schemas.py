@@ -55,3 +55,7 @@ class LearnAnswerResult(BaseModel):
     card: FlashCard
     learned: bool
     due_at: datetime | None
+
+
+class CharacterSet(BaseModel):
+    characters: list[str]
