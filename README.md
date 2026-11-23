@@ -142,6 +142,8 @@ Accents, letters such as ß, and punctuation must match.
 | `GET /api/v1/courses/{id}/study` | Counts for the course page: `due` (Revise), `learn_new` (up to 10), `new_total` |
 | `GET /api/v1/courses/{id}/study/revise` | Revise round: up to 10 due cards, most overdue first |
 | `POST /api/v1/courses/{id}/study/revise/{card_id}` | Answer a card (`{"answer": "..."}`): checked, recorded, rescheduled |
+| `GET /api/v1/courses/{id}/study/learn` | Learn round: up to 10 new cards, 3 shuffled exercises each |
+| `POST /api/v1/courses/{id}/study/learn/{card_id}` | Answer an exercise (`{"exercise": "...", "answer": "..."}`); all three kinds correct = learned, due in 4 hours |
 
 Full interactive documentation: `/docs`.
 Course, card and import endpoints require `Authorization: Bearer <token>`. Users only see their own courses; another user's course returns 404.
