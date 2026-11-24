@@ -36,6 +36,22 @@ uv run fastapi dev app/main.py
 
 API docs: http://127.0.0.1:8000/docs
 
+## Frontend
+
+Requires Node 24 (see `frontend/.nvmrc`).
+
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:5173
+```
+
+Checks:
+
+```bash
+npm run lint && npm run format:check && npm run typecheck && npm test && npm run build
+```
+
 ## Running checks
 
 Tests need the database running (`docker compose up -d db`) and, once, a test database:
@@ -65,6 +81,9 @@ vocab-app/
 │   ├── migrations/      # Alembic migrations
 │   ├── tests/
 │   └── pyproject.toml
+├── frontend/            # React + TypeScript (Vite, Tailwind)
+│   └── src/
+│       └── pages/       # one component per page
 └── docker-compose.yaml  # local PostgreSQL
 ```
 
