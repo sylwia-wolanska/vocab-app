@@ -52,6 +52,23 @@ Checks:
 npm run lint && npm run format:check && npm run typecheck && npm test && npm run build
 ```
 
+The frontend calls the API at `VITE_API_URL`, set in `frontend/.env.development`
+(`http://127.0.0.1:8000`). Open the app at `http://localhost:5173`; the backend
+only accepts requests from that origin (CORS).
+
+### API types
+
+`frontend/src/api/schema.d.ts` is generated from the backend's OpenAPI schema.
+After changing the API, regenerate it with the backend running and commit the
+result in the same PR:
+
+```bash
+cd frontend && npm run api:types
+```
+
+The generator runs through `npx` with a pinned version, because it does not yet
+support TypeScript 6 as a project dependency.
+
 ## Running checks
 
 Tests need the database running (`docker compose up -d db`) and, once, a test database:
