@@ -3,6 +3,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
 from app.cards.router import router as cards_router
@@ -28,13 +29,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
-app.include_router(health_router, prefix=settings.api_prefix)
-
-app = FastAPI(title=settings.app_name, lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 register_exception_handlers(app)
-app.include_router(health_router, prefix=settings.api_prefix)
-app.include_router(courses_router, prefix=settings.api_prefix)
-app.include_router(imports_router, prefix=settings.api_prefix)
-app.include_router(cards_router, prefix=settings.api_prefix)
 app.include_router(auth_router, prefix=settings.api_prefix)
+app.include_router(cards_router, prefix=settings.api_prefix)
+app.include_router(courses_router, prefix=settings.api_prefix)
+app.include_router(health_router, prefix=settings.api_prefix)
+app.include_router(imports_router, prefix=settings.api_prefix)
 app.include_router(study_router, prefix=settings.api_prefix)
