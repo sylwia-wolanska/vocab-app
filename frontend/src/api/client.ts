@@ -10,6 +10,12 @@ export const tokenStorage = {
   clear: () => localStorage.removeItem(TOKEN_KEY),
 };
 
+let handleUnauthorized = () => {};
+
+export function setUnauthorizedHandler(handler: () => void) {
+  handleUnauthorized = handler;
+}
+
 const authMiddleware: Middleware = {
   onRequest({ request }) {
     const token = tokenStorage.get();
@@ -17,6 +23,12 @@ const authMiddleware: Middleware = {
       request.headers.set("Authorization", `Bearer ${token}`);
     }
     return request;
+  },
+  onResponse({ request, response }) {
+    if (response.status === 401 && request.headers.has("Authorization")) {
+      handleUnauthorized();
+    }
+    return response;
   },
 };
 
