@@ -93,6 +93,7 @@ vocab-app/
 - Branch naming: `type/VOC-n-short-description` (e.g. `feat/VOC-4-cards-table`)
 - Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
 - Changes reach `main` only through a pull request with passing CI, merged with squash
+- CI runs two jobs on every pull request: `backend` (Ruff, mypy, migrations, pytest) and `frontend` (ESLint, Prettier, tsc, Vitest, build); both must pass
 
 ## Database migrations
 
