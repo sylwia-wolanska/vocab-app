@@ -69,6 +69,12 @@ cd frontend && npm run api:types
 The generator runs through `npx` with a pinned version, because it does not yet
 support TypeScript 6 as a project dependency.
 
+### Logging in
+
+Open `http://localhost:5173` and log in or register. The access token is kept in
+`localStorage`. It is removed on logout, and also when the API answers 401 to a
+request that sent a token (for example after the token expires).
+
 ## Running checks
 
 Tests need the database running (`docker compose up -d db`) and, once, a test database:
